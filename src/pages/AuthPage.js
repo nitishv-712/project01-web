@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
+
 export default function AuthPage() {
   const [mode, setMode] = useState('login');
   const [role, setRole] = useState('user');
@@ -22,10 +26,10 @@ export default function AuthPage() {
     setParentId('');
     setParents([]);
     if (newRole === 'subadmin') {
-      const res = await axios.get('/api/auth/admins');
+      const res = await api.get('/api/auth/admins');
       setParents(res.data);
     } else if (newRole === 'user') {
-      const res = await axios.get('/api/auth/subadmins');
+      const res = await api.get('/api/auth/subadmins');
       setParents(res.data);
     }
   };

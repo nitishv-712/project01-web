@@ -3,6 +3,10 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
+
 export default function TreePage() {
   const { user, logout } = useAuth();
   const [treeData, setTreeData] = useState(null);
@@ -13,7 +17,7 @@ export default function TreePage() {
   useEffect(() => {
     if (!user) return navigate('/');
     if (user.role === 'user') return navigate('/dashboard');
-    axios.get('/api/tree')
+    api.get('/api/tree')
       .then(res => setTreeData(res.data))
       .catch(err => setError(err.response?.data?.message || 'Failed to load'))
       .finally(() => setLoading(false));
